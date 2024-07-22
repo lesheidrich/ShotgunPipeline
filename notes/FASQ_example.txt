@@ -1,0 +1,12 @@
+@SEQ_ID_1
+GATTTGGGGTTTCCCAGTCACGACGTTGTA
++
+!''*((((***+))%%%++)(%%%%).1***-+*''))**55CCF>>>>>>CCCCCCC65
+@SEQ_ID_2
+CGTTGTACTCACGACGTTGTATCGGGTTTC
++
+!''*((((***+))%%%++)(%%%%).1***-+*''))**55CCF>>>>>>CCCCCCC65
+@SEQ_ID_3
+TTGACGTTGTAACCTTGGGGTTTCCAGTCA
++
+!''*((((***+))%%%++)(%%%%).1***-+*''))**55CCF>>>>>>CCCCCCC65
