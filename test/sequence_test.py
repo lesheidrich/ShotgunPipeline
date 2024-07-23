@@ -1,11 +1,11 @@
 import unittest
 from pathlib import Path
-from sequence import Sequence, QC
+from src.sequence import Sequence, QC
 
 
 class TestQC(unittest.TestCase):
     def setUp(self):
-        self.path = Path.cwd().parent / 'FASTQ_in' / 'SRR9855890.fastq.gz'
+        self.path = Path.cwd().parent / 'FASTQ_sample' / 'SRR9855890.fastq.gz'
         self.qc = QC(self.path)
 
     def test_init_attr(self):
