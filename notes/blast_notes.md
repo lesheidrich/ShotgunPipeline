@@ -6,14 +6,8 @@
 * coverage - higher is better
 * additional context - strains mentioned
 
-#### params
-* **evalue 0.001**: only values better tahn 0.001
-* **outfmt 6 (tabular format)**: tabular, xml or other output format
-* **hitlist_size 10**: max number of hits
-* **max_target_seqs 5**: max aligned seqs
-* **max_hsps 1**: max highs scoring segment paris
-* **perc_identity 90**: min alignment %
-* **best_hit_score_edge 0.1**: min for best hit
+#### docs
+https://biopython.org/docs/1.75/api/Bio.Blast.NCBIWWW.html
 
 #### sample output
 ```
