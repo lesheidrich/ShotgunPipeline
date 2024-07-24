@@ -13,17 +13,22 @@ seq = 'TACGAAGGGTGCAAGCGTTACTCGGAATTACTGGGCGTAAAGCGTGCGTAGGTGGTCGTTTAAGTCTGTTGTG
 # qc = QC(path)
 t = Taxonomy()
 
-# TODO: after initial filter sort results per yield by: size
 # TODO: figure out how to access alignemnt len, % identity, coverage
 
+# filtered = []
+# blast = t.blast_search(seq)
+# for result in t.e_val_filter(blast):
+#     filtered.append(result)
+#
+#     print(result['hit'])
+#     print(result['length'])
+#     print(result['e-value'])
+#     print(result['sequence'])
 
-blast = t.blast_search(seq)
-for result in t.e_val_filter(blast):
-    print(result['hit'])
-    print(result['length'])
-    print(result['e-value'])
-    print(result['sequence'])
-
+filtered = t.collect_and_sort(seq)
+print(filtered)
+# filtered.sort(key=lambda x: (x['e-value'], -x['length']))
+print(filtered)
 
 
 # hit = 'gi|2727575369|gb|PP762207.1| Stenotrophomonas maltophilia strain MRC55455 16S ribosomal RNA gene, partial sequence'
