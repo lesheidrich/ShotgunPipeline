@@ -154,7 +154,9 @@
 ### Definitions
 - **Linkage Disequilibrium (LD)**: The non-random association of alleles at different loci.
 - **Correlation Matrix**: A matrix used to represent the strength of linkage disequilibrium between genetic markers, with markers on the diagonal and color-coded elements showing the strength of associations.
+
 ![img.png](img2.png)
+
 
 ## 2.5. Haplotyping Reconstruction
 
