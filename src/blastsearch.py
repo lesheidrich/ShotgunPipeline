@@ -1,18 +1,14 @@
-"""
-Bio.Blast.NCBIWWW module docs:
-https://biopython.org/docs/1.75/api/Bio.Blast.NCBIWWW.html
-"""
-from typing import Generator
+from typing import Generator, Dict, Any
 from Bio.Blast import NCBIWWW, NCBIXML
 
 
-class Taxonomy:
+class BlastSearch:
     def __init__(self):
         self.min_e_val = 1
 
-    def blast_search(self, seq: str) -> Generator[dict]:
+    def _get_all_matches(self, seq: str, db: str = 'nt') -> Generator[Dict[str, Any], None, None]:
         """
-        BLAST search on NCBI online nucleotide (nt) DB
+        BLAST search on NCBI online DB, defaults to nucleotide (nt)
         Generator yields alignment hits as dict.
         Eg:
         {'hit': 'gi|2727575369|gb|PP762207.1| Stenotrophomonas maltophilia strain MRC55455 16S ribosomal RNA gene, partial sequence',
@@ -21,10 +17,11 @@ class Taxonomy:
          'sequence': 'TACGAAGGGTGCAAGCGTTACTCGGAATTACTGGGCGTAAAGCGTGCGTAGGTGGTCGTTTAAGTCTGTTGTGAAAGCCCTGGGCTCAACCTGGGAACTGCAGTGGAAACTGGACGACTAGAGTGTGGTAGAGGGTAGCGGAATTCCTGGTGTAGCAGTGAAATGCGTAGAGATCAGGAGGAACATCCATGGCGAAGGCAGCTACCTGGACCAACACTGACACTGAGGCACGAAAGCGTGGGGAGCAAACAGG'
         }
         :param seq: str of nucleotide sequence
-        :return: Generator[Dict] record hit from nt db
+        :param db: str of database to search, see notes/blast_notes.md for db list
+        :return: Generator[Dict[str, Any], None, None] record hit from nt db
         """
         try:
-            result = NCBIWWW.qblast("blastn", "nt", seq, hitlist_size=5)
+            result = NCBIWWW.qblast("blastn", db, seq, hitlist_size=5)
             records = NCBIXML.parse(result)
             for record in records:
                 for alignment in record.alignments:
@@ -36,28 +33,29 @@ class Taxonomy:
                             'sequence': hsp.sbjct
                         }
         except Exception as e:
-            print(f"Error during blast on sequence {seq}: {e}")
+            print(f"Error during blast search on sequence {seq} for db {db}: {e}")
 
-    def e_val_filter(self, blast: Generator[dict]) -> Generator[dict]:
+    def _e_val_filter(self, blast: Generator[Dict[str, Any], None, None]) -> Generator[Dict[str, Any], None, None]:
         """
-        Utility method filters accepted BLAST results to current lowest e-value.
+        Utility method filters accepted BLAST results returning lowest e-value as long as it's smaller than the
+        current smallest e-value.
         :param blast: Generator[Dict[str, Any], None, None] input from self.blast_search()
-        :return: Generator[Dict] record hit from nt db
+        :return: Generator[Dict[str, Any], None, None] record hit from nt db
         """
         for result in blast:
             if result['e-value'] <= self.min_e_val:
                 self.min_e_val = result['e-value']
                 yield result
 
-    def collect_and_sort(self, seq: str) -> dict:
+    def get_best_match(self, seq: str) -> Dict[str, Any]:
         """
         Collects pre-filtered BLAST search results.
-        Sorts them 'e-value' ascending, 'length' desc allowing [0] to be optimal result.
+        Sorts by asc 'e-value' and desc 'length' making [0] the optimal result to return
         :param seq: str of sequence to process
-        :return: Dict of BLAST result
+        :return: Dict[str, Any] of BLAST result
         """
         filtered = []
-        blast = self.blast_search(seq)
-        [filtered.append(result) for result in self.e_val_filter(blast)]
+        blast = self._get_all_matches(seq)
+        [filtered.append(result) for result in self._e_val_filter(blast)]
         filtered.sort(key=lambda x: (x['e-value'], -x['length']))
         return filtered[0]

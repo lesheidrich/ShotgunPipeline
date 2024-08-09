@@ -14,7 +14,16 @@ class Sequence:
         return f"Sequence ID: {self.id}\nSequence: {self.seq}\nPhreds: {self.phreds}\n"
 
 
-class QC:
+class Sequencer:
+    """
+    PATH: FASTQ.gz file path for input
+    THRESHOLD: Phred score threshold
+        - use 10-15 exploratory studies
+        - standard use (default setting) 20+ (99% accuracy)
+        - strict QC 30+ (99.9% accuracy)
+
+    Compiles a list of sequence objects on init
+    """
     def __init__(self, path: Path, threshold: int = 20):
         self.path = path
         self.threshold = threshold
@@ -49,6 +58,7 @@ class QC:
                 for sequence in SeqIO.parse(f, 'fastq'):
                     self.sequence_list.append(Sequence(
                             sequence.id,
+                            # * unpacks () into 2 separate args
                             *self._trim_seq(str(sequence.seq),
                                             sequence.letter_annotations['phred_quality']))
                     )

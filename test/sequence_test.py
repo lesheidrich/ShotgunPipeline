@@ -1,12 +1,12 @@
 import unittest
 from pathlib import Path
-from src.sequence import Sequence, QC
+from src.sequence import Sequence, Sequencer
 
 
 class TestQC(unittest.TestCase):
     def setUp(self):
         self.path = Path.cwd().parent / 'FASTQ_sample' / 'SRR9855890.fastq.gz'
-        self.qc = QC(self.path)
+        self.qc = Sequencer(self.path)
 
     def test_init_attr(self):
         self.assertEqual(self.qc.path, self.path)
